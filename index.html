@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Console Picker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #1a1a1a;
+                color: #ecf0f1;
+            }
+            .container {
+                background-color: #222;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            }
+            button, select, input {
+                background-color: #34495e;
+                color: #ecf0f1;
+                border: 1px solid #4a6278;
+            }
+            button:hover {
+                background-color: #2c3e50;
+            }
+            #result, .management-section {
+                background-color: #2c3e50;
+                color: #ecf0f1;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            }
+            input {
+                background-color: #34495e;
+                color: #ecf0f1;
+            }
+            select {
+                background-color: #34495e;
+                color: #ecf0f1;
+            }
+            select option {
+                background-color: #34495e;
+                color: #ecf0f1;
+            }
+            h1, h2 {
+                color: #3498db;
+            }
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            color: #2c3e50;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin: 10px 0 20px 0;
+        }
+
+        button, select, input {
+            padding: 12px 24px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            margin: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        #result {
+            font-size: 2em;
+            margin: 6px;
+            padding: 12px;
+            background-color: white;
+            color: #2c3e50;
+            border-radius: 12px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .management-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 5px 20px 20px 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 0;
+            width: 100%;
+            position: relative;
+        }
+
+        .management-section.visible {
+            max-height: 600px;
+            opacity: 1;
+            padding: 20px;
+        }
+
+        #consoleList {
+            width: 100%;
+            max-width: 300px;
+            margin: 10px 0;
+            border-radius: 8px;
+            padding: 8px;
+            color: #2c3e50;
+            background-color: white;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        input {
+            background-color: white;
+            color: #2c3e50;
+            border: 1px solid #dee2e6;
+        }
+
+        input::placeholder {
+            color: #95a5a6;
+        }
+
+        #settingsToggle {
+            background: none;
+            border: .25px solid #252a2e;
+            font-size: 1.5em;
+            padding: 10px;
+            cursor: pointer;
+            color: #838c92;
+            transition: transform 0.25s ease;
+            box-shadow: none;
+            margin: 15px 0 5px 0;
+        }
+
+        .settings-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        #settingsToggle:hover {
+            transform: rotate(90deg);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            padding: 5px 10px;
+            cursor: pointer;
+            color: #838c92;
+            transition: all 0.3s ease;
+            box-shadow: none;
+            z-index: 100;
+        }
+
+        .close-button:hover {
+            color: #e74c3c;
+            transform: scale(1.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .close-button {
+                color: #95a5a6;
+            }
+            .close-button:hover {
+                color: #e74c3c;
+            }
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .secondary-button {
+            background-color: #95a5a6;
+        }
+
+        .secondary-button:hover {
+            background-color: #7f8c8d;
+        }
+
+        .danger-button {
+            background-color: #78a78f;
+        }
+
+        .danger-button:hover {
+            background-color: #24c977;
+        }
+
+        .primary-button {
+            font-size: 1.2em;
+            padding: 15px 30px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: 95%;
+                padding: 10px;
+            }
+            
+            button, input {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            #result {
+                font-size: 1.5em;
+                padding: 20px;
+            }
+        }
+
+        /* New notification styles */
+        #notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="close-button" onclick="closeWindow()">
+            <i class="fas fa-times"></i>
+        </button>
+        <h1>Random Console Picker</h1>
+        <button onclick="pickRandomSystem()" class="primary-button">Pick a System!</button>
+        <div id="result">Ready to pick a system!</div>
+
+        <div class="settings-wrapper">
+            <button id="settingsToggle" onclick="toggleManagement()">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+
+        <div class="management-section" id="managementSection">
+            <h2>Manage Consoles</h2>
+            <div class="controls">
+                <input type="text" id="newConsole" placeholder="New console name">
+                <button onclick="addConsole()">Add Console</button>
+            </div>
+            <select id="consoleList" size="8" multiple></select>
+            <div class="button-group">
+                <button onclick="removeSelected()" class="danger-button">Remove Selected</button>
+                <button onclick="setAsDefault()" class="secondary-button">Set As Default</button>
+                <button onclick="resetToDefault()" class="secondary-button">Reset to Default</button>
+            </div>
+        </div>
+
+        <div id="notification"></div>
+    </div>
+
+    <script>
+        const defaultSystems = [
+            "NES", "Famicom", "Famicom Disk System", "Sega Genesis",
+            "Wii", "SNES", "PC", "Atari", "Switch", "N64",
+            "Original Playstation", "PS2", "PS3", "PS4", "PS5",
+            "Create your own game"
+        ];
+
+        let systems = [];
+        const resultElement = document.getElementById('result');
+        const consoleList = document.getElementById('consoleList');
+        const newConsoleInput = document.getElementById('newConsole');
+        const managementSection = document.getElementById('managementSection');
+
+        function toggleManagement() {
+            managementSection.classList.toggle('visible');
+            const settingsIcon = document.querySelector('#settingsToggle i');
+            settingsIcon.style.transform = managementSection.classList.contains('visible') 
+                ? 'rotate(90deg)' 
+                : 'rotate(0deg)';
+        }
+
+        function closeWindow() {
+            if (confirm('Are you sure you want to close the application?')) {
+                window.close();
+            }
+        }
+
+        // Initialize systems from localStorage or default
+        function initSystems() {
+            const storedSystems = localStorage.getItem('consoleSystems');
+            const storedDefaults = localStorage.getItem('defaultSystems');
+            
+            if (storedDefaults) {
+                defaultSystems.length = 0;
+                defaultSystems.push(...JSON.parse(storedDefaults));
+            }
+            
+            systems = storedSystems ? JSON.parse(storedSystems) : [...defaultSystems];
+            saveSystems();
+            updateConsoleList();
+        }
+
+        function saveSystems() {
+            localStorage.setItem('consoleSystems', JSON.stringify(systems));
+            updateConsoleList();
+        }
+
+        function updateConsoleList() {
+            consoleList.innerHTML = '';
+            systems.forEach(system => {
+                const option = new Option(system, system);
+                consoleList.add(option);
+            });
+        }
+
+        function addConsole() {
+            const newConsole = newConsoleInput.value.trim();
+            if (newConsole && !systems.includes(newConsole)) {
+                systems.push(newConsole);
+                saveSystems();
+                newConsoleInput.value = '';
+            }
+        }
+
+        function removeSelected() {
+            const selectedOptions = Array.from(consoleList.selectedOptions);
+            systems = systems.filter(system => 
+                !selectedOptions.some(option => option.value === system)
+            );
+            saveSystems();
+        }
+
+        function setAsDefault() {
+            if (confirm('Are you sure you want to set the current list as the new default?')) {
+                localStorage.setItem('defaultSystems', JSON.stringify(systems));
+            }
+        }
+
+        function resetToDefault() {
+            systems = [...defaultSystems];
+            saveSystems();
+            showNotification("Systems list has been reset to default!");
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            // Slight delay to allow the opacity transition to kick in
+            setTimeout(() => {
+                notification.style.opacity = '1';
+            }, 10);
+            // After 2 seconds, fade out the notification slowly
+            setTimeout(() => {
+              notification.style.opacity = '0';
+              setTimeout(() => {
+                  notification.style.display = 'none';
+              }, 300);
+            }, 2000);
+        }
+
+        function pickRandomSystem() {
+            if (systems.length === 0) {
+                resultElement.textContent = 'No systems available. Please add some!';
+                return;
+            }
+
+            const randomIndex = Math.floor(Math.random() * systems.length);
+            const selectedSystem = systems[randomIndex];
+            resultElement.textContent = selectedSystem;
+        }
+
+        // Initialize on page load
+        initSystems();
+
+        // Add enter key support for adding consoles
+        newConsoleInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addConsole();
+            }
+        });
+    </script>
+</body>
+</html>

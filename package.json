@@ -1,0 +1,38 @@
+{
+  "name": "random-console-picker",
+  "version": "1.0.0",
+  "description": "A random console picker application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder build --win --mac",
+    "build:win": "electron-builder build --win",
+    "build:mac": "electron-builder build --mac"
+  },
+  "build": {
+    "appId": "com.randomconsolepicker.app",
+    "productName": "Random Console Picker",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": ["nsis"],
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "icon": "assets/icon.icns"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1"
+  }
+} 

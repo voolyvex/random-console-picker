@@ -2,28 +2,38 @@
 
 A simple desktop application that helps you randomly pick a gaming console to play. Perfect for those who can't decide which console to fire up!
 
-![Random Console Picker Screenshot](assets/screenshot.png)
-
 ## Features
 
-- 🎮 Randomly select from your console collection
-- 🌓 Dark/Light mode support
-- ⚙️ Customizable console list
-- 💾 Persistent storage of your console collection
-- 🖥️ Cross-platform support (Windows & macOS)
-- 🎯 System tray support with quick access
-- 🎨 Beautiful modern UI with smooth animations
+* 🎮 Randomly select from your console collection
+* 🌓 Dark/Light mode support
+* ⚙️ Customizable console list
+* 💾 Persistent storage of your console collection
+* 🖥️ Cross-platform support (Windows & macOS)
+* 🎯 System tray support with quick access
+* 🎨 Beautiful modern UI with smooth animations
+* 🔄 Automatic window sizing for different displays
+* 🛡️ Enhanced error handling and stability
+* 💫 Improved notifications system
+
+## Technical Improvements
+
+* Responsive window sizing based on screen resolution
+* Robust error handling for storage operations
+* Improved icon loading with fallback support
+* Enhanced notification system with better timing
+* Better handling of invalid data in storage
+* Improved UI responsiveness and animations
 
 ## Installation
 
 ### Windows
-1. Go to the [Releases](https://github.com/yourusername/random-console-picker/releases) page
+1. Go to the [Releases](https://github.com/voolyvex/random-console-picker/releases) page
 2. Download the latest `Random.Console.Picker.Setup.exe`
 3. Run the installer
 4. Launch from your desktop shortcut or start menu
 
 ### macOS
-1. Go to the [Releases](https://github.com/yourusername/random-console-picker/releases) page
+1. Go to the [Releases](https://github.com/voolyvex/random-console-picker/releases) page
 2. Download the latest `Random.Console.Picker.dmg`
 3. Open the DMG file
 4. Drag the app to your Applications folder
@@ -32,9 +42,9 @@ A simple desktop application that helps you randomly pick a gaming console to pl
 ## Development
 
 ### Prerequisites
-- Node.js (v14 or higher)
-- npm (comes with Node.js)
-- Git
+* Node.js (v14 or higher)
+* npm (comes with Node.js)
+* Git
 
 ### Setup
 ```bash
@@ -65,6 +75,50 @@ npm run build
 
 The built installers will be available in the `dist` folder.
 
+### Icon Specifications
+
+The application uses a custom icon in multiple formats:
+
+#### Windows (ICO)
+* Single `icon.ico` file containing multiple sizes:
+  * 16x16 (taskbar)
+  * 24x24
+  * 32x32 (file icons)
+  * 48x48
+  * 64x64
+  * 128x128
+  * 256x256
+
+#### macOS (ICNS)
+* Single `icon.icns` file containing:
+  * 16x16 (16pt @1x)
+  * 32x32 (16pt @2x)
+  * 32x32 (32pt @1x)
+  * 64x64 (32pt @2x)
+  * 128x128 (128pt @1x)
+  * 256x256 (128pt @2x)
+  * 256x256 (256pt @1x)
+  * 512x512 (256pt @2x)
+  * 512x512 (512pt @1x)
+  * 1024x1024 (512pt @2x)
+
+Source files are maintained in SVG format for scalability.
+
+## Project Structure
+
+```
+random-console-picker/
+├── assets/
+│   ├── icon.svg        # Source vector icon
+│   ├── icon.ico        # Windows icon
+│   └── icon.icns       # macOS icon
+├── src/
+│   ├── index.html      # Main application UI
+│   └── main.js         # Main electron process
+├── package.json        # Project configuration
+└── systems.json        # Default console list
+```
+
 ## Contributing
 
 1. Fork the repository
@@ -79,6 +133,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Built with [Electron](https://www.electronjs.org/)
-- Icons from [Font Awesome](https://fontawesome.com/)
-- Custom SVG icon design
+* Built with [Electron](https://www.electronjs.org/)
+* Icons from [Font Awesome](https://fontawesome.com/)
+* Custom SVG icon design

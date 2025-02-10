@@ -120,14 +120,14 @@
             background-color: white;
             padding: 20px;
             border-radius: 12px;
-            margin: 5px 20px 20px 20px;
+            margin: -10px 30px 20px 30px;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             max-height: 0;
             overflow: hidden;
             transition: all 0.3s ease;
             opacity: 0;
-            width: 100%;
+            width: calc(100% - 60px);
             position: relative;
         }
 
@@ -175,14 +175,21 @@
             transition: transform 0.25s ease;
             box-shadow: none;
             margin: 15px 0 5px 0;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .settings-wrapper {
             width: 100%;
             display: flex;
             justify-content: flex-end;
-            padding: 0 20px;
+            padding: 0 35px;
             box-sizing: border-box;
+            margin-top: -5px;
         }
 
         #settingsToggle:hover {
@@ -291,7 +298,7 @@
             <i class="fas fa-times"></i>
         </button>
         <h1>Random Console Picker</h1>
-        <button onclick="pickRandomSystem()" class="primary-button">Pick a System!</button>
+        <span>Pick a System: </span><button onclick="pickRandomSystem()" class="primary-button">Go</button>
         <div id="result">Ready to pick a system!</div>
 
         <div class="settings-wrapper">
@@ -322,7 +329,7 @@
             "NES", "Famicom", "Famicom Disk System", "Sega Genesis",
             "Wii", "SNES", "PC", "Atari", "Switch", "N64",
             "Original Playstation", "PS2", "PS3", "PS4", "PS5",
-            "Create your own game"
+            "Play a board game", "Solve a puzzle", "ASCII game", "Invent a game"
         ];
 
         let systems = [];
@@ -361,22 +368,43 @@
 
         // Initialize systems from localStorage or default
         function initSystems() {
-            const storedSystems = localStorage.getItem('consoleSystems');
-            const storedDefaults = localStorage.getItem('defaultSystems');
-            
-            if (storedDefaults) {
-                defaultSystems.length = 0;
-                defaultSystems.push(...JSON.parse(storedDefaults));
+            try {
+                const storedSystems = localStorage.getItem('consoleSystems');
+                const storedDefaults = localStorage.getItem('defaultSystems');
+                
+                if (storedDefaults) {
+                    try {
+                        const parsedDefaults = JSON.parse(storedDefaults);
+                        if (Array.isArray(parsedDefaults)) {
+                            defaultSystems.length = 0;
+                            defaultSystems.push(...parsedDefaults);
+                        }
+                    } catch (e) {
+                        console.error('Failed to parse stored defaults:', e);
+                    }
+                }
+                
+                systems = storedSystems ? JSON.parse(storedSystems) : [...defaultSystems];
+                if (!Array.isArray(systems)) {
+                    systems = [...defaultSystems];
+                }
+                saveSystems();
+                updateConsoleList();
+            } catch (e) {
+                console.error('Error initializing systems:', e);
+                systems = [...defaultSystems];
+                updateConsoleList();
             }
-            
-            systems = storedSystems ? JSON.parse(storedSystems) : [...defaultSystems];
-            saveSystems();
-            updateConsoleList();
         }
 
         function saveSystems() {
-            localStorage.setItem('consoleSystems', JSON.stringify(systems));
-            updateConsoleList();
+            try {
+                localStorage.setItem('consoleSystems', JSON.stringify(systems));
+                updateConsoleList();
+            } catch (e) {
+                console.error('Failed to save systems:', e);
+                showNotification('Failed to save changes. Storage might be full.');
+            }
         }
 
         function updateConsoleList() {
@@ -389,48 +417,82 @@
 
         function addConsole() {
             const newConsole = newConsoleInput.value.trim();
-            if (newConsole && !systems.includes(newConsole)) {
-                systems.push(newConsole);
-                saveSystems();
-                newConsoleInput.value = '';
+            if (newConsole) {
+                if (!systems.includes(newConsole)) {
+                    systems.push(newConsole);
+                    saveSystems();
+                    newConsoleInput.value = '';
+                    showNotification(`Added ${newConsole} to the list`);
+                } else {
+                    showNotification(`${newConsole} is already in the list`);
+                }
             }
         }
 
         function removeSelected() {
             const selectedOptions = Array.from(consoleList.selectedOptions);
+            if (selectedOptions.length === 0) {
+                showNotification('Please select systems to remove');
+                return;
+            }
+            
             systems = systems.filter(system => 
                 !selectedOptions.some(option => option.value === system)
             );
             saveSystems();
+            showNotification(`Removed ${selectedOptions.length} system(s)`);
         }
 
         function setAsDefault() {
+            if (systems.length === 0) {
+                showNotification('Cannot set empty list as default');
+                return;
+            }
+            
             if (confirm('Are you sure you want to set the current list as the new default?')) {
-                localStorage.setItem('defaultSystems', JSON.stringify(systems));
+                try {
+                    localStorage.setItem('defaultSystems', JSON.stringify(systems));
+                    showNotification('Current list set as new default');
+                } catch (e) {
+                    console.error('Failed to set defaults:', e);
+                    showNotification('Failed to set default list');
+                }
             }
         }
 
         function resetToDefault() {
-            systems = [...defaultSystems];
-            saveSystems();
-            showNotification("Systems list has been reset to default!");
+            if (confirm('Are you sure you want to reset to the default list?')) {
+                systems = [...defaultSystems];
+                saveSystems();
+                showNotification('Systems list has been reset to default!');
+            }
         }
 
-        function showNotification(message) {
+        function showNotification(message, duration = 2000) {
             const notification = document.getElementById('notification');
+            if (!notification) return;
+
+            // Clear any existing timeout
+            if (notification.hideTimeout) {
+                clearTimeout(notification.hideTimeout);
+                notification.hideTimeout = null;
+            }
+
             notification.textContent = message;
             notification.style.display = 'block';
+            
             // Slight delay to allow the opacity transition to kick in
-            setTimeout(() => {
+            requestAnimationFrame(() => {
                 notification.style.opacity = '1';
-            }, 10);
-            // After 2 seconds, fade out the notification slowly
-            setTimeout(() => {
-              notification.style.opacity = '0';
-              setTimeout(() => {
-                  notification.style.display = 'none';
-              }, 300);
-            }, 2000);
+            });
+
+            // After specified duration, fade out the notification
+            notification.hideTimeout = setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 300);
+            }, duration);
         }
 
         function pickRandomSystem() {

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="transparent" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- Define the drop shadow filter and gradient-->
+    <defs>
+        <filter id="dropShadow" x="-67%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+            <feOffset dx="5" dy="7"/>
+            <feComponentTransfer>
+                <feFuncA type="linear" slope="0.4"/>
+            </feComponentTransfer>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+        <linearGradient id="gradient" x1="0%" y1="60%" x2="100%" y2="20%">
+            <stop offset="0%" style="stop-color:rgba(255, 255, 255, 0.7);stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:rgba(0, 20, 63, 0.4);stop-opacity:0.8"/>
+        </linearGradient>
+    </defs>
+
+
+    <path d="M 256,132 
+             C 270,132 416,306 416,316
+             C 416,326 270,456 256,456
+             C 242,456 96,326 96,316
+             C 96,306 242,132 256,132"
+          fill="url(#gradient)" 
+          fill-opacity="0.5"/>
+
+    <!-- First Layered Path -->
+    <path d="M 256,132 
+             C 270,132 416,306 416,316
+             C 416,326 270,456 256,456
+             C 242,456 96,326 96,316
+             C 96,306 242,132 256,132"
+          fill="url(#gradient)" 
+          fill-opacity="0.5"
+          transform="rotate(90 256 276)"/> 
+
+    <!-- Second Layered Path -->
+    <path d="M 256,111 
+             C 270,132 416,306 416,316
+             C 416,326 270,456 256,456
+             C 242,456 96,326 96,316
+             C 96,306 242,132 256,111"
+          fill="url(#gradient)" 
+          fill-opacity="0.5"
+          transform="rotate(-90 256 276)"/> 
+        <!-- Third Layered Path -->
+    <path d="M 256,111 
+             C 270,132 416,306 416,316
+             C 416,326 270,456 256,456
+             C 242,456 96,326 96,316
+             C 96,306 242,132 256,111"
+          fill="url(#gradient)" 
+          fill-opacity="0.5"
+         /> 
+    <path d="M 256,121 
+           C 296,121 416,236 416,276 
+           C 416,316 296,432 256,428 
+           C 216,432 96,316 96,276 
+           C 96,236 216,124 256,121 Z" 
+        stroke="snow" 
+        stroke-width="96"
+        stroke-opacity="0.90"
+        fill="url(#gradient)"
+        fill-opacity=".9" 
+        filter="url(#dropShadow)"
+    />
+    <path d="M 256,121 
+           C 296,121 416,236 416,276 
+           C 416,316 296,432 256,428 
+           C 216,432 96,316 96,276 
+           C 96,236 216,121 256,121 Z" 
+        stroke="snow" 
+        stroke-width="96"
+        stroke-opacity="0.90"
+        fill="url(#gradient)"
+        fill-opacity=".9" 
+        transform="rotate(180 256 276)" 
+        filter="url(#dropShadow)"
+    />
+    <path d="M 256,121 
+           C 296,121 416,236 416,276 
+           C 416,316 296,432 256,428 
+           C 216,432 96,316 96,276 
+           C 96,236 216,121 256,121 Z" 
+        stroke="snow" 
+        stroke-width="96"
+        stroke-opacity="0.90"
+        fill="url(#gradient)"
+        fill-opacity=".9" 
+        transform="rotate(-180 256 275)" 
+        filter="url(#dropShadow)"
+    />
+
+    <circle cx="256" cy="276" r="95" fill="slategray" fill-opacity="0.5"/>     <!-- Center -->
+    <circle cx="256" cy="276" r="75" fill="snow" fill-opacity="0.5"/>     <!-- Center -->
+    <rect x="146" y="160" width="220" height="224" fill="thistle" fill-opacity="1" filter="url(#dropShadow)"/>
+    <circle cx="256" cy="276" r="168" fill="url(#gradient)" fill-opacity="0.5" stroke="snow" stroke-width="18" stroke-opacity="0.5"/>     <!-- Center Overlay -->
+    <circle cx="256" cy="276" r="168" fill="url(#gradient)" fill-opacity="0.5" stroke="snow" stroke-width="18" stroke-opacity="0.5" transform="rotate(-180 256 275)"/>     <!-- Center Overlay -->
+    <circle cx="256" cy="270" r="75" fill="url(#gradient)" fill-opacity="0.5"/>     <!-- Center -->
+
+    <circle cx="256" cy="276" r="168" fill="snow" fill-opacity="0.25"/>     <!-- Center Overlay -->
+    <circle cx="256" cy="276" r="168" fill="snow" fill-opacity="0.25" stroke="snow" stroke-width="18" stroke-opacity="0.35" transform="rotate(-180 256 275)"/>     <!-- Center Overlay -->
+    <circle cx="179" cy="378" r="50" fill="#FFD700" fill-opacity="1.0" filter="url(#dropShadow)"/>       <!-- Bottom Left -->
+    <circle cx="99"  cy="275" r="50" fill="seagreen" fill-opacity="1.0" filter="url(#dropShadow)"/>       <!-- Left -->
+    <circle cx="179" cy="170" r="50" fill="white" fill-opacity="1.0" filter="url(#dropShadow)"/>        <!-- Top Left -->
+    <circle cx="333" cy="170" r="50" fill="#E74C3C" fill-opacity="1.0" filter="url(#dropShadow)"/>       <!-- Top Right -->
+    <circle cx="413" cy="276" r="50" fill="slategray" fill-opacity="1.0" filter="url(#dropShadow)"/>       <!-- Right -->
+    <circle cx="333" cy="378" r="50" fill="#7DF9FF" fill-opacity="1.0" filter="url(#dropShadow)"/>       <!-- Bottom Right -->
+
+</svg> 

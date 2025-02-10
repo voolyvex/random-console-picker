@@ -11,6 +11,8 @@ A simple desktop application that helps you randomly pick a gaming console to pl
 - ⚙️ Customizable console list
 - 💾 Persistent storage of your console collection
 - 🖥️ Cross-platform support (Windows & macOS)
+- 🎯 System tray support with quick access
+- 🎨 Beautiful modern UI with smooth animations
 
 ## Installation
 
@@ -37,7 +39,7 @@ A simple desktop application that helps you randomly pick a gaming console to pl
 ### Setup
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/random-console-picker.git
+git clone https://github.com/voolyvex/random-console-picker.git
 
 # Navigate to the project directory
 cd random-console-picker
@@ -78,4 +80,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 
 - Built with [Electron](https://www.electronjs.org/)
-- Icons from [Font Awesome](https://fontawesome.com/) 
+- Icons from [Font Awesome](https://fontawesome.com/)
+- Custom SVG icon design

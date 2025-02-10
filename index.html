@@ -340,9 +340,23 @@
         }
 
         function closeWindow() {
-            if (confirm('Are you sure you want to close the application?')) {
-                window.close();
-            }
+            const notification = document.getElementById('notification');
+            notification.textContent = 'Application minimized to system tray';
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                // Use IPC to tell the main process to minimize
+                require('electron').ipcRenderer.send('minimize-to-tray');
+            }, 10);
+            
+            // Hide the notification after a delay
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 300);
+            }, 2000);
         }
 
         // Initialize systems from localStorage or default

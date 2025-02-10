@@ -25,34 +25,41 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: windowWidth,
         height: windowHeight,
+        minWidth: 500,
+        minHeight: 700,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
         },
-        autoHideMenuBar: true,
-        icon: getIconPath()
+        icon: getIconPath(),
+        backgroundColor: '#00000000',
+        transparent: true,
+        frame: true,
+        resizable: true,
+        maximizable: true,
+        minimizable: true
     });
 
     mainWindow.loadFile('index.html').catch(err => {
         console.error('Failed to load index.html:', err);
     });
 
-    // Center the window
-    mainWindow.center();
-
-    // Prevent window from closing
-    mainWindow.on('close', (event) => {
-        if (!isQuitting) {
-            event.preventDefault();
-            mainWindow.hide();
-        }
-        return false;
+    // Center window on creation and when resized
+    mainWindow.on('resize', () => {
+        const bounds = mainWindow.getBounds();
+        const { width: screenWidth, height: screenHeight } = screen.getPrimaryDisplay().workAreaSize;
+        const x = Math.floor((screenWidth - bounds.width) / 2);
+        const y = Math.floor((screenHeight - bounds.height) / 2);
+        mainWindow.setBounds({ ...bounds, x, y });
     });
 
-    // Handle minimize to tray
+    // Handle minimize from custom button
     ipcMain.on('minimize-to-tray', () => {
         mainWindow.hide();
     });
+
+    // Center the window initially
+    mainWindow.center();
 }
 
 function createTray() {
@@ -63,7 +70,10 @@ function createTray() {
     }
 
     try {
-        tray = new Tray(iconPath);
+        // Create tray with native image to ensure proper transparency
+        const nativeImage = require('electron').nativeImage;
+        const trayIcon = nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 });
+        tray = new Tray(trayIcon);
         
         const contextMenu = Menu.buildFromTemplate([
             {

@@ -1,6 +1,12 @@
-# Random Console Picker v1.0.0
+# Random Console Picker v1.1.0
 
 🎮 First public release of Random Console Picker! 
+
+## New Features
+- Added Reset to Original Defaults button
+- Improved window management with resizable and maximizable options
+- Enhanced UI layout and spacing
+- Better input field handling during operations
 
 ## Features
 - Random console selection from your customized list
@@ -44,6 +50,12 @@ Comes pre-loaded with popular gaming systems:
 - Mount the disk image
 - Drag to Applications folder
 - Launch from Applications
+
+## Bug Fixes
+- Fixed input/select disabling issue after certain operations
+- Improved window controls positioning
+- Fixed copyright text visibility
+- Removed redundant refresh functionality
 
 ## Known Issues
 - Window close button may require two clicks in some cases

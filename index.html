@@ -21,7 +21,8 @@
 
         .container {
             width: 90%;
-            max-width: 600px;
+            max-width: 800px;
+            min-height: 700px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -76,7 +77,23 @@
             margin-bottom: 30px;
             font-size: 2.5em;
             color: #2c3e50;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            text-shadow: 
+                0 0 10px rgba(255, 223, 148, 0.3),   /* Inner glow */
+                0 0 20px rgba(255, 223, 148, 0.2),   /* Middle glow */
+                0 0 30px rgba(255, 223, 148, 0.1),   /* Outer glow */
+                1px 1px 2px rgba(0, 0, 0, 0.1);      /* Original shadow for depth */
+            transition: all 0.3s ease;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            h1 {
+                color: #ecf0f1;
+                text-shadow: 
+                    0 0 10px rgba(255, 223, 148, 0.4),   /* Inner glow - brighter for dark mode */
+                    0 0 20px rgba(255, 223, 148, 0.3),   /* Middle glow */
+                    0 0 30px rgba(255, 223, 148, 0.2),   /* Outer glow */
+                    1px 1px 2px rgba(0, 0, 0, 0.2);      /* Stronger shadow for dark mode */
+            }
         }
 
         h2 {
@@ -187,9 +204,8 @@
             width: 100%;
             display: flex;
             justify-content: flex-end;
-            padding: 0 35px;
-            box-sizing: border-box;
-            margin-top: -5px;
+            padding: 0 20px;
+            margin-top: 20px;
         }
 
         #settingsToggle:hover {
@@ -211,8 +227,12 @@
             z-index: 100;
         }
 
+        .close-button i {
+            transform: scale(0.8);
+        }
+
         .close-button:hover {
-            color: #e74c3c;
+            color: #3498db;
             transform: scale(1.1);
         }
 
@@ -221,7 +241,7 @@
                 color: #95a5a6;
             }
             .close-button:hover {
-                color: #e74c3c;
+                color: #3498db;
             }
         }
 
@@ -290,11 +310,133 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
+
+        /* Add refresh button next to gear */
+        .management-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-direction: row-reverse;
+        }
+
+        #refreshButton {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            padding: 10px;
+            cursor: pointer;
+            color: #838c92;
+            transition: all 0.2s ease;
+            box-shadow: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: -5px;
+        }
+
+        #refreshButton:hover {
+            transform: rotate(45deg);
+        }
+
+        #refreshButton i {
+            font-size: 0.9em;
+        }
+
+        .settings-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 20px;
+            margin-top: 20px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            padding: 5px 10px;
+            cursor: pointer;
+            color: #838c92;
+            transition: all 0.3s ease;
+            box-shadow: none;
+            z-index: 100;
+        }
+
+        /* Updated tooltip styles */
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]:before {
+            content: attr(data-tooltip);
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translate(10px, -50%);
+            padding: 4px 8px;
+            background-color: rgba(44, 62, 80, 0.8);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.75em;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        [data-tooltip]:hover:before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .copyright {
+            position: relative;
+            margin-top: 20px;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.9em;
+            padding: 10px;
+            width: 100%;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper label {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .checkbox-wrapper {
+                color: #95a5a6;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <button class="close-button" onclick="closeWindow()">
+        <button class="close-button" onclick="closeWindow()" data-tooltip="Close">
             <i class="fas fa-times"></i>
         </button>
         <h1>Random Console Picker</h1>
@@ -302,9 +444,11 @@
         <div id="result">Ready to pick a system!</div>
 
         <div class="settings-wrapper">
-            <button id="settingsToggle" onclick="toggleManagement()">
-                <i class="fas fa-cog"></i>
-            </button>
+            <div class="management-controls">
+                <button id="settingsToggle" onclick="toggleManagement()" data-tooltip="Manage Console List">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
         </div>
 
         <div class="management-section" id="managementSection">
@@ -319,19 +463,28 @@
                 <button onclick="setAsDefault()" class="secondary-button">Set As Default</button>
                 <button onclick="resetToDefault()" class="secondary-button">Reset to Default</button>
             </div>
+            <div class="button-group">
+                <button onclick="resetToOriginalDefaults()" class="secondary-button">Reset to Original Defaults</button>
+            </div>
         </div>
 
         <div id="notification"></div>
+        <a href="#" onclick="showLicense()" class="copyright">© Voolyvex</a>
     </div>
 
     <script>
-        const defaultSystems = [
+        // Original default systems that ship with the app
+        const originalDefaults = [
             "NES", "Famicom", "Famicom Disk System", "Sega Genesis",
             "Wii", "SNES", "PC", "Atari", "Switch", "N64",
             "Original Playstation", "PS2", "PS3", "PS4", "PS5",
-            "Play a board game", "Solve a puzzle", "ASCII game", "Invent a game"
+            "Play a board game", "Solve a puzzle", "ASCII game", "Invent a game",
+            "Steam Deck", "Xbox", "Xbox 360", "Xbox One", "Xbox Series X/S",
+            "Game Boy", "Game Boy Color", "Game Boy Advance", "Nintendo DS", "Nintendo 3DS"
         ];
 
+        // Working copy of defaults that can be modified
+        let defaultSystems = [...originalDefaults];
         let systems = [];
         const resultElement = document.getElementById('result');
         const consoleList = document.getElementById('consoleList');
@@ -366,21 +519,28 @@
             }, 2000);
         }
 
-        // Initialize systems from localStorage or default
         function initSystems() {
             try {
+                const preserveDefaults = localStorage.getItem('preserveDefaults') !== 'false';
+                document.getElementById('preserveDefaults').checked = preserveDefaults;
+
                 const storedSystems = localStorage.getItem('consoleSystems');
                 const storedDefaults = localStorage.getItem('defaultSystems');
                 
-                if (storedDefaults) {
+                if (preserveDefaults && storedDefaults) {
                     try {
                         const parsedDefaults = JSON.parse(storedDefaults);
                         if (Array.isArray(parsedDefaults)) {
-                            defaultSystems.length = 0;
-                            defaultSystems.push(...parsedDefaults);
+                            defaultSystems = parsedDefaults;
                         }
                     } catch (e) {
                         console.error('Failed to parse stored defaults:', e);
+                        defaultSystems = [...originalDefaults];
+                    }
+                } else {
+                    defaultSystems = [...originalDefaults];
+                    if (storedDefaults) {
+                        localStorage.removeItem('defaultSystems');
                     }
                 }
                 
@@ -392,6 +552,7 @@
                 updateConsoleList();
             } catch (e) {
                 console.error('Error initializing systems:', e);
+                defaultSystems = [...originalDefaults];
                 systems = [...defaultSystems];
                 updateConsoleList();
             }
@@ -451,8 +612,13 @@
             
             if (confirm('Are you sure you want to set the current list as the new default?')) {
                 try {
-                    localStorage.setItem('defaultSystems', JSON.stringify(systems));
+                    defaultSystems.length = 0;
+                    defaultSystems.push(...systems);
+                    localStorage.setItem('defaultSystems', JSON.stringify(defaultSystems));
                     showNotification('Current list set as new default');
+                    // Enable inputs after operation
+                    newConsoleInput.disabled = false;
+                    consoleList.disabled = false;
                 } catch (e) {
                     console.error('Failed to set defaults:', e);
                     showNotification('Failed to set default list');
@@ -465,6 +631,18 @@
                 systems = [...defaultSystems];
                 saveSystems();
                 showNotification('Systems list has been reset to default!');
+                // Enable inputs after operation
+                newConsoleInput.disabled = false;
+                consoleList.disabled = false;
+            }
+        }
+
+        function resetToOriginalDefaults() {
+            if (confirm('Are you sure you want to reset to the original default list?')) {
+                defaultSystems = [...originalDefaults];
+                systems = [...defaultSystems];
+                saveSystems();
+                showNotification('Reset to original default list');
             }
         }
 
@@ -504,6 +682,53 @@
             const randomIndex = Math.floor(Math.random() * systems.length);
             const selectedSystem = systems[randomIndex];
             resultElement.textContent = selectedSystem;
+        }
+
+        function showLicense() {
+            // Read and display the LICENSE file content
+            fetch('LICENSE')
+                .then(response => response.text())
+                .then(text => {
+                    const licenseWindow = window.open('', 'License', 'width=600,height=400');
+                    licenseWindow.document.write(`
+                        <html>
+                            <head>
+                                <title>License Information</title>
+                                <style>
+                                    body {
+                                        font-family: 'Segoe UI', Arial, sans-serif;
+                                        line-height: 1.6;
+                                        padding: 20px;
+                                        max-width: 800px;
+                                        margin: 0 auto;
+                                        background-color: #f8f9fa;
+                                        color: #2c3e50;
+                                    }
+                                    @media (prefers-color-scheme: dark) {
+                                        body {
+                                            background-color: #1a1a1a;
+                                            color: #ecf0f1;
+                                        }
+                                    }
+                                    pre {
+                                        white-space: pre-wrap;
+                                        word-wrap: break-word;
+                                        padding: 15px;
+                                        background-color: rgba(0,0,0,0.05);
+                                        border-radius: 8px;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                <pre>${text}</pre>
+                            </body>
+                        </html>
+                    `);
+                })
+                .catch(error => {
+                    console.error('Error loading LICENSE:', error);
+                    showNotification('Failed to load license information');
+                });
         }
 
         // Initialize on page load

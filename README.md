@@ -4,10 +4,10 @@ A simple desktop application that helps you randomly pick a gaming console to pl
 
 ## Features
 
-* 🎮 Randomly select from your console collection
+* 🎮 Randomly select from your gaming console collection
 * 🌓 Dark/Light mode support
-* ⚙️ Customizable console list
-* 💾 Persistent storage of your console collection
+* ⚙️ Streamlined console management
+* 💾 Automatic saving and backup of your console list
 * 🖥️ Cross-platform support (Windows & macOS)
 * 🎯 System tray support with quick access
 * 🎨 Beautiful modern UI with smooth animations
@@ -21,8 +21,9 @@ A simple desktop application that helps you randomly pick a gaming console to pl
 * Robust error handling for storage operations
 * Improved icon loading with fallback support
 * Enhanced notification system with better timing
-* Better handling of invalid data in storage
+* Streamlined state management
 * Improved UI responsiveness and animations
+* Automatic backup system for console lists
 
 ## Installation
 

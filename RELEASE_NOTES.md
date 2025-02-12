@@ -1,6 +1,24 @@
-# Random Console Picker v1.1.0
+# Release Notes
 
-🎮 First public release of Random Console Picker! 
+## Version 1.0.0 (2024-03-XX)
+
+Initial release of Random Console Picker
+
+### Features
+- Random console selection with smooth animations
+- Dark/Light mode support
+- Console list management (add, edit, remove)
+- Automatic saving of console list
+- Cross-platform support (Windows & macOS)
+- Modern UI with responsive design
+- System tray integration
+
+### Technical Details
+- Built with Electron
+- Responsive window sizing
+- Local storage for console list
+- Error handling and recovery
+- Custom icon support for all platforms
 
 ## New Features
 - Added Reset to Original Defaults button

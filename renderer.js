@@ -73,13 +73,6 @@ function showNotification(message, forcedDuration = null) {
 }
 
 function enableInputs() {
-    console.log('enableInputs called', {
-        currentState: { ...state },
-        inputDisabled: elements.newConsoleInput.disabled,
-        inputDisplay: elements.newConsoleInput.style.display,
-        managementVisible: elements.managementSection.classList.contains('visible')
-    });
-    
     // Cancel any pending animation frame
     if (state.debugFrameId !== null) {
         cancelAnimationFrame(state.debugFrameId);
@@ -88,12 +81,8 @@ function enableInputs() {
     
     state.isInputEnabled = true;
     
-    // Ensure we're working with the actual DOM element
     const input = elements.newConsoleInput;
-    if (!input) {
-        console.error('Input element not found');
-        return;
-    }
+    if (!input) return;
 
     // Clear any existing disabled state
     input.disabled = false;
@@ -102,41 +91,18 @@ function enableInputs() {
     
     // Force a DOM reflow to ensure state is updated
     input.style.display = 'none';
-    input.offsetHeight; // Force reflow
+    input.offsetHeight;
     input.style.display = '';
-    
-    console.log('After state update', {
-        inputDisabled: input.disabled,
-        inputDisplay: input.style.display,
-        pointerEvents: input.style.pointerEvents
-    });
     
     // Only focus if management section is visible
     if (state.isManagementVisible) {
-        // Use a more reliable focus method with debug logging
         state.debugFrameId = requestAnimationFrame(() => {
-            console.log('Animation frame executing', {
-                timeElapsed: state.lastInputEvent ? performance.now() - state.lastInputEvent : null,
-                inputState: {
-                    disabled: input.disabled,
-                    display: input.style.display,
-                    focused: document.activeElement === input
-                }
-            });
-            
             input.blur();
             input.focus();
             
             // Ensure the cursor is at the end of any existing text
             const len = input.value.length;
             input.setSelectionRange(len, len);
-            
-            // Verify focus state after changes
-            console.log('Focus state after changes', {
-                focused: document.activeElement === input,
-                selectionStart: input.selectionStart,
-                selectionEnd: input.selectionEnd
-            });
             
             state.debugFrameId = null;
         });
@@ -370,6 +336,19 @@ function restoreFromBackup() {
     return false;
 }
 
+function setupLedIndicator() {
+    const gamepadIcon = elements.pickButton.querySelector('i.fas.fa-gamepad');
+    if (!gamepadIcon) return;
+
+    // Ensure we only have one LED indicator
+    const existingLed = elements.pickButton.querySelector('.led-indicator');
+    if (!existingLed) {
+        const led = document.createElement('div');
+        led.className = 'led-indicator';
+        elements.pickButton.appendChild(led);
+    }
+}
+
 // Event listeners
 function setupEventListeners() {
     const input = elements.newConsoleInput;
@@ -401,7 +380,6 @@ function setupEventListeners() {
         }
     });
 
-    // Add window blur/focus handlers to manage visibility state
     window.addEventListener('blur', () => {
         if (elements.managementSection.classList.contains('visible')) {
             state.isManagementVisible = true;
@@ -417,7 +395,6 @@ function setupEventListeners() {
         }
     });
 
-    // Remove overlay click handler since we're not using overlay anymore
     elements.closeButton.addEventListener('click', closeWindow);
     elements.appTitle.addEventListener('dblclick', toggleMaximize);
     elements.pickButton.addEventListener('click', handlePickRandomSystem);
@@ -430,28 +407,6 @@ function setupEventListeners() {
     // Prevent clicks in management section from bubbling
     elements.managementSection.addEventListener('click', (e) => {
         e.stopPropagation();
-    });
-
-    // Add debug event listener
-    input.addEventListener('input', (e) => {
-        console.log('Input event fired', {
-            value: e.target.value,
-            timestamp: performance.now(),
-            inputState: {
-                disabled: e.target.disabled,
-                display: e.target.style.display,
-                focused: document.activeElement === e.target
-            }
-        });
-    });
-
-    input.addEventListener('blur', () => {
-        console.log('Input blur event', {
-            timestamp: performance.now(),
-            inputEnabled: state.isInputEnabled,
-            managementVisible: state.isManagementVisible,
-            activeElement: document.activeElement.tagName
-        });
     });
 }
 
@@ -472,6 +427,7 @@ function initSystems() {
         }
         
         updateState(state.systems);
+        setupLedIndicator();
     } catch (e) {
         console.error('System initialization error:', e);
         updateState([...state.originalDefaults]);
